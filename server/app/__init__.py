@@ -1,5 +1,6 @@
 from eve import Eve
 from app.oauth2 import BearerAuth
+from flask import make_response
 from flask.ext.sentinel import ResourceOwnerPasswordCredentials, oauth
 
 
@@ -8,9 +9,19 @@ def on_delete_item_marketers(item):
     blogs_collection = app.data.driver.db['blogs']
     blogs_collection.delete_many({'marketer._id': item['_id']})
 
+def on_delete_resource_marketers():
+    blogs_collection = app.data.driver.db['blogs']
+    blogs_collection.remove()
+
 app = Eve(auth=BearerAuth)
 ResourceOwnerPasswordCredentials(app)
 app.on_delete_item_marketers += on_delete_item_marketers
+
+@app.route("/languages", methods=['GET'])
+def get_languages():
+    blogs_collection = app.data.driver.db['blogs']
+    languages = blogs_collection.distinct('language')
+    return make_response(languages)
 
 if __name__ == '__main__':
     import argparse
