@@ -58,6 +58,7 @@ marketers = {
 }
 
 blogs = {
+    'resource_methods': ['GET', 'POST', 'DELETE'],
     'public_methods': ['GET'],
     'public_item_methods': ['GET'],
     'schema': {
